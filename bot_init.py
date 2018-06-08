@@ -1,7 +1,6 @@
 import discord
-import py
 from discord.ext import commands
-import random
+import numpy
 
 token = ""
 pref = "!"
@@ -82,7 +81,7 @@ async def tictactoe(ctx):
         elif msg.content=='O':
             await ctx.send(x + ' will play X and ' + y+ ' will play O')
 
-        if random.randint(0, 1) == 0:
+        if numpy.random.randint(0, 1) == 0:
             await ctx.send(y +' will go first')
             b = False
         else:
