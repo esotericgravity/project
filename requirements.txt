@@ -1,2 +1,2 @@
-discord == 1.0.0a
+discord == 0.10.0
 random == 2.4
