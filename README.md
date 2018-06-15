@@ -1,4 +1,4 @@
-# to setup:
+# to set up:
 
 add this bot to your discord server 
 you probably want to just set up your own bot first
