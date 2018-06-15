@@ -117,4 +117,4 @@ async def tictactoe(ctx):
                 await ctx.send('X wins')
         await ctx.send('game over')
 
-bot.run("NDUzMzkxODUxMjE5ODQ1MTIw.Dfejdw.zanzcUynjgFjebEsdhgk5hoYzEA")
+bot.run(token)
