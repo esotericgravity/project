@@ -12,5 +12,5 @@ clone this repo
 #
 change directory to the location it was saved to
 #
-run the command 'python bot_init.py'in the directory of the repo
+run the command 'python bot_init.py' in the directory of the repo
 
