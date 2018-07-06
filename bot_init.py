@@ -1,12 +1,17 @@
 import discord
 from discord.ext import commands
 import numpy
+import os
 import gunicorn
+import r6sapi
+import apiclient
+import asyncio
 
-token = ""
+
 pref = "!"
 bot = commands.Bot(command_prefix=pref)
-    
+r6auth = r6sapi.Auth(r6email, r6pwd)
+
 def init_b(b):
     a='board:\n\n'
     a += '       |       |       '
@@ -24,19 +29,19 @@ def init_b(b):
     checkb(b)
     return a
 
-def checkb(b):  
-    if((b[7-1]== 'O' and b[8-1]=='O' and b[9-1]=='O') or 
-               (b[4-1]== 'O' and b[5-1]=='O' and b[6-1]=='O') or 
-               (b[1-1]== 'O' and b[2-1]=='O' and b[3-1]=='O') or 
+def checkb(b):
+    if((b[7-1]== 'O' and b[8-1]=='O' and b[9-1]=='O') or
+               (b[4-1]== 'O' and b[5-1]=='O' and b[6-1]=='O') or
+               (b[1-1]== 'O' and b[2-1]=='O' and b[3-1]=='O') or
                (b[1-1]== 'O' and b[4-1]=='O' and b[7-1]=='O') or
                (b[2-1]== 'O' and b[5-1]=='O' and b[8-1]=='O') or
                (b[3-1]== 'O' and b[6-1]=='O' and b[9-1]=='O') or
                (b[1-1]== 'O' and b[5-1]=='O' and b[9-1]=='O') or
                (b[3-1]== 'O' and b[5-1]=='O' and b[7-1]=='O')):
         return 1
-    elif((b[7-1]== 'X' and b[8-1]=='X' and b[9-1]=='X') or 
-               (b[4-1]== 'X' and b[5-1]=='X' and b[6-1]=='X') or 
-               (b[1-1]== 'X' and b[2-1]=='X' and b[3-1]=='X') or 
+    elif((b[7-1]== 'X' and b[8-1]=='X' and b[9-1]=='X') or
+               (b[4-1]== 'X' and b[5-1]=='X' and b[6-1]=='X') or
+               (b[1-1]== 'X' and b[2-1]=='X' and b[3-1]=='X') or
                (b[1-1]== 'X' and b[4-1]=='X' and b[7-1]=='X') or
                (b[2-1]== 'X' and b[5-1]=='X' and b[8-1]=='X') or
                (b[3-1]== 'X' and b[6-1]=='X' and b[9-1]=='X') or
@@ -48,7 +53,6 @@ def checkb(b):
 def input(b,s):
     b[int(s[2])-1]=s[0].upper()
 
-        
 @bot.event
 async def on_ready():
     print('logged in as')
@@ -57,12 +61,53 @@ async def on_ready():
     print('------')
 
 @bot.command()
+async def ping(ctx):
+    t= time.time()
+    await ctx.send('pinging...')
+    p = time.time()- t
+    await ctx.send('{} ms'.format(p))
+
+@bot.command()
 async def add(ctx, a: int, b: int):
     await ctx.send(a+b)
 
 @bot.command()
 async def multiply(ctx, a: int, b: int):
     await ctx.send(a*b)
+
+# @bot.command()
+# async def yt(ctx, a):
+#     await ctx.send('searching for {}...'.format(a))
+#     await ctx.send()
+
+@bot.command()
+@asyncio.coroutine
+def r6(ctx, a, b=""):
+    p=None
+    if ctx.message.author.name == "Semper_Gumby":
+        yield from ctx.channel.send('shut up ' + ctx.message.author.name + ', ur a')
+    try:
+        p= yield from r6auth.get_player(a, r6sapi.Platforms.UPLAY)
+    except:
+        yield from ctx.channel.send('player not found')
+    p.load_gamemodes()
+    o = yield from p.load_weapons()
+    op = p.load_all_operators()
+    # yield from ctx.channel.send(str(o.kills))
+    a=""
+    f=" "
+    for i in o:
+        a+=('weapon: {}\t\t\t\t\tkill count: {}\t\t\t\t\theadshot count: {}\t\t\t\t\taccuracy: {}%\n'.format(i.name,i.kills,i.headshots, i.hits/i.shots*100))
+        # yield (i.name, i.kills,i.headshots,i.hits/i.shots*100)
+    yield from bot.wait_until_ready()
+    yield from ctx.channel.send(a)
+    # if b!="":
+    #     for i in op:
+    #         if i ==b:
+    #             w=p.get_operator(i)
+    #             f+=("{} stats:\nwins: {}\t\t\t\t\tkill count: {}\t\t\t\t\tdeath count: {}\t\t\t\t\theadshot count: {}\t\t\t\t\tmelees: {}\t\t\t\t\ttime played: {}".format(w.name,w.wins,w.kills,w.deaths,w.headshots, w.melees,w.time_played))
+    #     yield from ctx.channel.send(f)
+# asyncio.get_event_loop().run_until_complete(r6())
 
 @bot.command()
 async def tictactoe(ctx):
