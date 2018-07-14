@@ -1,7 +1,7 @@
 discord-rewrite == 1.0.0
 numpy == 1.13.1
 r6sapi == 0.7.0
-apiclient == 1.7.3
+apiclient == 1.0.3
 aiohttp == 2.2.5
 gunicorn== 19.9.0
 asyncio == 3.4.3
