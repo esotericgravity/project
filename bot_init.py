@@ -7,13 +7,6 @@ import time
 import spotipy
 import spotipy.util as util
 
-token = "NDUzMzkxODUxMjE5ODQ1MTIw.XN9JdQ.dYHP5VgNxJJ74xQgoPCM8HOBmiw"
-pref = "!"
-bot = commands.Bot(command_prefix=pref)
-token2 = util.prompt_for_user_token('rgrgrg67', scope='playlist-modify-private,playlist-modify-public',
-client_id='ca2af81ac67744cbb9d3d07b4d778600', client_secret='52b8353c36e24d8d8c871b3deafbe69f', redirect_uri='https://localhost:8080')
-spot=spotipy.Spotify(auth=token2)
-
 def init_b(b):
     a='board:\n\n'
     a += '       |       |       '
@@ -69,20 +62,7 @@ async def ping(ctx):
     p = time.time()- t
     await ctx.send('{} ms'.format(p))
 
-@bot.command()
-async def addsongs(ctx):
-    m = []
-    a=[]
-    if ctx.channel.id==579137887778635776:
-        async for i in ctx.channel.history(limit=1000):
-            m.append(i)
-        for i in m:
-            if i.content[:31]=="https://open.spotify.com/track/":
-                a.append(i.content[31:53])
-                await bot.http.delete_message(579137887778635776, i.id)
-            if i.content=="!addsongs":
-                await bot.http.delete_message(579137887778635776, i.id)
-    spot.user_playlist_add_tracks('rgrgrg67', playlist_id='spotify:user:rgrgrg67:playlist:1Hs30WzfobXTkTC5yyTEEE', tracks=a)
+
 
 @bot.command()
 async def clear(ctx):
@@ -96,14 +76,6 @@ async def clear(ctx):
 @bot.command()
 async def multiply(ctx, a: int, b: int):
     await ctx.send(a*b)
-
-@bot.command()
-async def slur(ctx):
-    f = open('C:\\Users\\MALIXX\\Downloads\\bot\\abcdef.txt')
-    s = f.readlines()
-    q=numpy.random.randint(278)
-    await ctx.send(s[q])
-    f.close()
 
 @bot.command()
 async def tictactoe(ctx):
