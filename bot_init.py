@@ -62,8 +62,6 @@ async def ping(ctx):
     p = time.time()- t
     await ctx.send('{} ms'.format(p))
 
-
-
 @bot.command()
 async def clear(ctx):
     m=[]
