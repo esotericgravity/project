@@ -1,4 +1,4 @@
-#discord-bot
+# discord-bot
 performs miscellaneous tasks in private Discord servers such as delivering game statistics for users, formatting a game of tic-tac-toe in text channels, and showing users their server latency. you can modify it to mess with ppl too.
 
 
