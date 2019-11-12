@@ -1,23 +1,7 @@
-# discord-bot
-performs miscellaneous tasks in private Discord servers such as delivering game statistics for users, formatting a game of tic-tac-toe in text channels, and showing users their server latency. you can modify it to mess with ppl too.
+#bot
 
+Get your `Client ID` and `Token` from Discord's developer page.
+Then go to `https://discordapp.com/oauth2/authorize?client_id={Your ClientId Here}&scope=bot` to add discord_bot to your server 
 
-
-
-
-# to set up:
-
-add this bot to your discord server
-#
-you probably want to just set up your own bot first
-#
-get your client id and token, then go to https://discordapp.com/oauth2/authorize?client_id=xxxxxx&scope=bot
-#
-set token in line 6 equal to your bot's token
-#
-clone this repo
-#
-change directory to the location it was saved to
-#
-run the command 'python bot_init.py' in the directory of the repo
-
+Clone this repo and add your `Token` to `bot_init.py` (line 6).
+Execute `bot_init.py` and discord_bot will come online.
