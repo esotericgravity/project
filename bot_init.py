@@ -1,12 +1,12 @@
 import discord
 from discord.ext import commands
 import numpy
-import gunicorn
+import os
+import asyncio
+import time
+import spotipy
+import spotipy.util as util
 
-token = ""
-pref = "!"
-bot = commands.Bot(command_prefix=pref)
-    
 def init_b(b):
     a='board:\n\n'
     a += '       |       |       '
@@ -24,19 +24,19 @@ def init_b(b):
     checkb(b)
     return a
 
-def checkb(b):  
-    if((b[7-1]== 'O' and b[8-1]=='O' and b[9-1]=='O') or 
-               (b[4-1]== 'O' and b[5-1]=='O' and b[6-1]=='O') or 
-               (b[1-1]== 'O' and b[2-1]=='O' and b[3-1]=='O') or 
+def checkb(b):
+    if((b[7-1]== 'O' and b[8-1]=='O' and b[9-1]=='O') or
+               (b[4-1]== 'O' and b[5-1]=='O' and b[6-1]=='O') or
+               (b[1-1]== 'O' and b[2-1]=='O' and b[3-1]=='O') or
                (b[1-1]== 'O' and b[4-1]=='O' and b[7-1]=='O') or
                (b[2-1]== 'O' and b[5-1]=='O' and b[8-1]=='O') or
                (b[3-1]== 'O' and b[6-1]=='O' and b[9-1]=='O') or
                (b[1-1]== 'O' and b[5-1]=='O' and b[9-1]=='O') or
                (b[3-1]== 'O' and b[5-1]=='O' and b[7-1]=='O')):
         return 1
-    elif((b[7-1]== 'X' and b[8-1]=='X' and b[9-1]=='X') or 
-               (b[4-1]== 'X' and b[5-1]=='X' and b[6-1]=='X') or 
-               (b[1-1]== 'X' and b[2-1]=='X' and b[3-1]=='X') or 
+    elif((b[7-1]== 'X' and b[8-1]=='X' and b[9-1]=='X') or
+               (b[4-1]== 'X' and b[5-1]=='X' and b[6-1]=='X') or
+               (b[1-1]== 'X' and b[2-1]=='X' and b[3-1]=='X') or
                (b[1-1]== 'X' and b[4-1]=='X' and b[7-1]=='X') or
                (b[2-1]== 'X' and b[5-1]=='X' and b[8-1]=='X') or
                (b[3-1]== 'X' and b[6-1]=='X' and b[9-1]=='X') or
@@ -48,7 +48,6 @@ def checkb(b):
 def input(b,s):
     b[int(s[2])-1]=s[0].upper()
 
-        
 @bot.event
 async def on_ready():
     print('logged in as')
@@ -57,8 +56,20 @@ async def on_ready():
     print('------')
 
 @bot.command()
-async def add(ctx, a: int, b: int):
-    await ctx.send(a+b)
+async def ping(ctx):
+    t= time.time()
+    await ctx.send('pinging...')
+    p = time.time()- t
+    await ctx.send('{} ms'.format(p))
+
+@bot.command()
+async def clear(ctx):
+    m=[]
+    async for i in ctx.channel.history(limit=1000):
+        m.append(i)
+    for i in m:
+        if i.author==bot.user:
+            await bot.http.delete_message(ctx.channel.id, i.id)
 
 @bot.command()
 async def multiply(ctx, a: int, b: int):
@@ -68,8 +79,8 @@ async def multiply(ctx, a: int, b: int):
 async def tictactoe(ctx):
     b = True
     c = 0
-    if ctx.message.author.name == "Semper_Gumby":
-        await ctx.send('shut up ' + ctx.message.author.name + ', ur a ')
+    if ctx.message.author.name == "temp":
+        await ctx.send('shut up ' + ctx.message.author.name)
     else:
         await ctx.send('X or O?')
         msg = await bot.wait_for("message")
@@ -108,7 +119,6 @@ async def tictactoe(ctx):
             except ValueError:
                 h = await bot.wait_for("message")
                 input(b,h.content)
-            #await ctx.send('verify')
             c+=1
             await ctx.send(init_b(b))
             if(checkb(b)==1):
@@ -117,4 +127,8 @@ async def tictactoe(ctx):
                 await ctx.send('X wins')
         await ctx.send('game over')
 
+@bot.command()
+async def shutdown(ctx):
+    await ctx.bot.logout()
+#TODO add spotify code which is somewhere among my old computers
 bot.run(token)
