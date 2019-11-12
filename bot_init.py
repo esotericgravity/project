@@ -80,7 +80,7 @@ async def tictactoe(ctx):
     b = True
     c = 0
     if ctx.message.author.name == "temp":
-        await ctx.send('shut up ' + ctx.message.author.name + ', ur a ')
+        await ctx.send('shut up ' + ctx.message.author.name)
     else:
         await ctx.send('X or O?')
         msg = await bot.wait_for("message")
@@ -119,7 +119,6 @@ async def tictactoe(ctx):
             except ValueError:
                 h = await bot.wait_for("message")
                 input(b,h.content)
-            #await ctx.send('verify')
             c+=1
             await ctx.send(init_b(b))
             if(checkb(b)==1):
@@ -131,5 +130,5 @@ async def tictactoe(ctx):
 @bot.command()
 async def shutdown(ctx):
     await ctx.bot.logout()
-
+#TODO add spotify code which is somewhere among my old computers
 bot.run(token)
